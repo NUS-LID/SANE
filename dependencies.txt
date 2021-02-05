@@ -1,0 +1,10 @@
+1. The tqdm package to track the progress of filling up the replay buffer if resuming a training run from a saved checkpoint.
+2. Tensorflow for deep learning : tensorflow-gpu==1.15.0 
+Important Note :
+Please make sure that CUDA 10.0 and cuDNN version 7.6.5 are installed. The code may seem to run, but the agent will not learn if tensorflow runs on other CUDA/cuDNN versions. (See README for more details on how to setup CUDA)
+
+3. OpenAI gym : git+https://github.com/openai/gym.git@cc6ff414aefe669cc8d221a482ebe211816f60fe#egg=gym
+4. Atari environments of OpenAI gym : gym[atari]
+
+To install dependencies run :
+./install.sh

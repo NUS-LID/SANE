@@ -1,0 +1,116 @@
+This codebase provides an implementation of SANE. This implementation is built on top of an existing vanilla-DQN implementation https://github.com/fg91/Deep-Q-Learning.
+
+Dependencies :
+The dependencies are mentioned in dependencies.txt
+Important note :
+Please make sure that CUDA 10.0 and cuDNN version >= 7.6.5 are installed. The code may seem to run, but the agent will not learn if tensorflow runs on other CUDA/cuDNN versions.
+
+The experiments were performed with the following system specifications :
+Python3 (Version = 3.6.4 or 3.7.4)
+Ubuntu 16.04 or Ubuntu 18.04
+This codebase is written in python3. 
+
+
+Please follow the following commands to install the dependencies and run the code in a  Linux based environment (Preferably Ubuntu 18.04 or Ubuntu 16.04)
+It is preferable to set up a new virtual environment using virtualenv / conda before installing the dependencies and running the agents to ensure a clean installation.
+
+Setup :
+
+If you don't have Anaconda for python 3, install it from https://docs.anaconda.com/anaconda/install/linux/
+
+Create and activate a new environment
+
+    conda create --name dqn_env python=3.6
+    conda activate dqn_env
+
+Install the correct versions of CUDA and cuDNN
+
+    conda install cudnn
+    conda install cudatoolkit=10.0
+
+Check your installation with the following commands :
+
+    conda list cudnn 
+    conda list cuda
+These should show version 10.0.130 for cudatoolkit and >=7.6.5 for cudnn
+
+After installing CUDA dependencies, to install the required packages run :
+    ./install.sh
+
+
+Training Agents :
+
+Command to train an epsilon-greedy agent :
+    python train_DQN.py --train True --environment <atari environment name> --RUNID <run_id> --USE_DEFAULTS True --EPS_GREEDY_AGENT True 
+    Example command :
+    python train_DQN.py --train True --environment AsterixDeterministic-v4 --RUNID Asterix_run1_eps --USE_DEFAULTS True --EPS_GREEDY_AGENT True 
+
+Command to train a NoisyNet agent :
+    python train_DQN.py --train True --environment <atari environment name> --RUNID <run_id> --USE_DEFAULTS True --NOISY_NET_AGENT True 
+    Example command :
+    python train_DQN.py --train True --environment AsterixDeterministic-v4 --RUNID Asterix_run1_noisy --USE_DEFAULTS True --NOISY_NET_AGENT True  
+
+Command to train a SANE agent :
+    python train_DQN.py --train True --environment <atari environment name> --RUNID <run_id> --USE_DEFAULTS True --SANE_AGENT True 
+    Example command :
+    python train_DQN.py --train True --environment AsterixDeterministic-v4 --RUNID Asterix_run1_sane --USE_DEFAULTS True --SANE_AGENT True  
+
+Command to train a Q-SANE agent :
+    python train_DQN.py --train True --environment <atari environment name> --RUNID <run_id> --USE_DEFAULTS True --Q_SANE_AGENT True 
+    Example command :
+    python train_DQN.py --train True --environment AsterixDeterministic-v4 --RUNID Asterix_run1_qsane --USE_DEFAULTS True --Q_SANE_AGENT True  
+
+The trained models are stored in the directory <run_id>_output/
+
+
+
+Evaluating trained agents :
+
+Command to evaluate an epsilon-greedy agent :
+    python train_DQN.py --environment <atari environment name> --RUNID <run_id> --USE_DEFAULTS True --EPS_GREEDY_AGENT True 
+    Example command :
+    python train_DQN.py --environment AsterixDeterministic-v4 --RUNID Asterix_run1_eps --USE_DEFAULTS True --EPS_GREEDY_AGENT True 
+
+Command to evaluate a NoisyNet agent :
+    python train_DQN.py --environment <atari environment name> --RUNID <run_id> --USE_DEFAULTS True --NOISY_NET_AGENT True 
+    Example command :
+    python train_DQN.py --environment AsterixDeterministic-v4 --RUNID Asterix_run1_noisy --USE_DEFAULTS True --NOISY_NET_AGENT True  
+
+Command to evaluate a SANE agent :
+    python train_DQN.py --environment <atari environment name> --RUNID <run_id> --USE_DEFAULTS True --SANE_AGENT True 
+    Example command :
+    python train_DQN.py --environment AsterixDeterministic-v4 --RUNID Asterix_run1_sane --USE_DEFAULTS True --SANE_AGENT True  
+
+Command to evaluate a Q-SANE agent :
+    python train_DQN.py --environment <atari environment name> --RUNID <run_id> --USE_DEFAULTS True --Q_SANE_AGENT True 
+    Example command :
+    python train_DQN.py --environment AsterixDeterministic-v4 --RUNID Asterix_run1_qsane --USE_DEFAULTS True --Q_SANE_AGENT True  
+
+The above commands will evaluate the latest checkpoint of the trained model. 
+The directory <run_id>_output/ should contain the index, meta, data and checkpoint files of the model to be evaluated.
+
+
+Optional Arguments :
+
+--DEVICE_ID : 
+    By default, trainDQN.py loads tensorflow on all available GPUs on the machine. This can be restricted to a single GPU by adding the flag --DEVICE_ID <gpu_id>, where gpu_id ranges from 0...NUM_GPUs-1
+
+--LOAD_MODEL :
+    If you need to resume training from a saved checkpoint, the latest saved model can be loaded by adding the option --LOAD_MODEL True.  The directory <run_id>_output/ should contain the index, meta, data and checkpoint files of the model to be loaded. By default, 50000 transitions are loaded in the replay buffer following the policy suggested by the loaded model.
+
+Environments to train/evaluate :
+
+We use the Deterministic-v4 environment to train/evaluate our agents. Thus, the following environments were used in our experiments :
+1. AsterixDeterministic-v4
+2. AtlantisDeterministic-v4
+3. BoxingDeterministic-v4
+4. BowlingDeterministic-v4
+5. EnduroDeterministic-v4
+6. FishingDerbyDeterministic-v4
+7. IceHockeyDeterministic-v4
+8. QbertDeterministic-v4
+9. RiverraidDeterministic-v4
+10. RoadRunnerDeterministic-v4
+11. SeaquestDeterministic-v4
+
+Tables 1 and 2 (in the main submission) detail the average scores achieved by the agents on being trained for 25M interactions and being evaluated on 500K interactions
